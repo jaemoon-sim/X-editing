@@ -13,17 +13,18 @@ import dlib
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor("./model/shape_predictor_68_face_landmarks.dat")
 
-#  def extractImages(pathIn, pathOut):
-    #  count = 0
-    #  vidcap = cv2.VideoCapture(pathIn)
-    #  success,image = vidcap.read()
-    #  success = True
-    #  while success:
-        #  vidcap.set(cv2.CAP_PROP_POS_MSEC,(count*1000))    # added this line
-        #  success,image = vidcap.read()
-        #  print ('Read a new frame: ', success)
-        #  cv2.imwrite( pathOut + "frame%03d.jpg" % count, image)     # save frame as JPEG file
-        #  count = count + 1
+def extractImages(pathIn, pathOut, msec):
+    count = 0
+    vidcap = cv2.VideoCapture(pathIn)
+    success,image = vidcap.read()
+    success = True
+    while success:
+        vidcap.set(cv2.CAP_PROP_POS_MSEC,(count*msec))    # added this line
+        success,image = vidcap.read()
+        if not success :
+            break
+        cv2.imwrite( pathOut + "frame%03d.jpg" % count, image)     # save frame as JPEG file
+        count = count + 1
 
 def countFaces(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -62,7 +63,8 @@ if __name__ == "__main__":
     print("welcome to x-editing")
 
     ### Extract 1 frame per sec
-    #  extractImages("./videos/musicbank.mp4", "./musicbank_images")
-    #  extractImages("./videos/mcountdown.mp4", "./mcountdown_images")
+    extractImages("./videos/musicbank.mp4", "./musicbank_images/", 1000)
+    extractImages("./videos/mcountdown.mp4", "./mcountdown_images/", 1000)
+
     createCandidate()
 
